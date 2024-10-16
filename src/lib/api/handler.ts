@@ -33,9 +33,12 @@ type $ = {
 }
 
 function setBody(options: IOptions, api: APIContent) {
-	if (options.config.sendEmptyBodyAsJSON === false) return
-	if (api.method === 'GET' || api.method === 'HEAD') return
-	api.body = 'body' in api ? typeof api.body === 'object' && JSON.stringify(api.body) : '{}'
+    if (
+		options.config.sendEmptyBodyAsJSON === false
+		|| api.method === 'GET' || api.method === 'HEAD'
+		|| api.body instanceof FormData
+	) return;
+    api.body = 'body' in api ? (typeof api.body === 'object' && !(api.body instanceof FormData) ? JSON.stringify(api.body) : api.body) : '{}';
 }
 
 export default function handler(options: IOptions, api: APIContent) {
