@@ -1,5 +1,5 @@
-import type { ZeroAPIConfig } from '../types/options'
-import keys from './keys.js'
+import type { ZeroAPIConfig } from '../types/options';
+import keys from './keys.js';
 
 type Fn = (response: SvelteResponse) => any
 type Callback = [number, Fn]
@@ -47,11 +47,6 @@ export default function handler(options: IOptions, api: APIContent) {
 
 	const url = (options.config.baseUrl || '') + options.path + ('query' in api ? '?' + new URLSearchParams(api.query).toString() : '')
 	const baseData = options.config.baseData || {}
-
-	if (!('content-type' in api.headers)) {
-		const isForm = Object.prototype.toString.call(api.body) === '[object FormData]'
-		api.headers['content-type'] = isForm ? 'multipart/form-data' : 'application/json'
-	}
 
 	setBody(options, api)
 
