@@ -7,11 +7,11 @@ function stringifyQuery(api) {
     }
 }
 function setBody(options, api) {
-    if (options.config.sendEmptyBodyAsJSON === false)
+    if (options.config.sendEmptyBodyAsJSON === false
+        || api.method === 'GET' || api.method === 'HEAD'
+        || api.body instanceof FormData)
         return;
-    if (api.method === 'GET' || api.method === 'HEAD')
-        return;
-    api.body = 'body' in api ? typeof api.body === 'object' && JSON.stringify(api.body) : '{}';
+    api.body = 'body' in api ? (typeof api.body === 'object' && !(api.body instanceof FormData) ? JSON.stringify(api.body) : api.body) : '{}';
 }
 export default function handler(options, api) {
     const { fetch } = options;
